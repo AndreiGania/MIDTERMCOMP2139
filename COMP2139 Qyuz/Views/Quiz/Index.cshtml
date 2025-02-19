@@ -1,0 +1,81 @@
+﻿@model List<QuizQuestion>
+@{
+    ViewData["Title"] = "ASP.NET Core Quiz";
+}
+<a href="@Url.Action("Quiz3", "Quiz")" class="btn btn-primary">Next Page (Quiz 3)</a>
+<h2>Week 1</h2>
+<button onclick="shuffleQuestions('quizContainer1')">Shuffle Quiz 1</button>
+<div id="quizContainer1">
+    @foreach (var question in ViewBag.Quiz1)
+    {
+        <div class="question-block">
+            <p><strong>@question.QuestionText</strong></p>
+            @if (!string.IsNullOrEmpty(question.ImageUrl))
+            {
+                <img src="@question.ImageUrl" alt="Question Image" style="max-width: 300px; display: block; margin-bottom: 10px;" />
+            }
+            @foreach (var option in question.Options)
+            {
+                var isCorrect = option == question.CorrectAnswer;
+                <label class="quiz-option" data-correct="@isCorrect">
+                    <input type="radio" name="userAnswers1[]" value="@option" onchange="showAnswer(this)" />
+                    @option <span class="answer-indicator" style="display:none;">@(isCorrect ? "✅" : "❌")</span>
+                </label>
+                <br />
+            }
+        </div>
+    }
+</div>
+
+<h2>Week 2</h2>
+<button onclick="shuffleQuestions('quizContainer2')">Shuffle Quiz 2</button>
+<div id="quizContainer2">
+    @foreach (var question in ViewBag.Quiz2)
+    {
+        <div class="question-block">
+            <p><strong>@question.QuestionText</strong></p>
+            @if (!string.IsNullOrEmpty(question.ImageUrl))
+            {
+                <img src="@question.ImageUrl" alt="Question Image" style="max-width: 300px; display: block; margin-bottom: 10px;" />
+            }
+            @foreach (var option in question.Options)
+            {
+                var isCorrect = option == question.CorrectAnswer;
+                <label class="quiz-option" data-correct="@isCorrect">
+                    <input type="radio" name="userAnswers2[]" value="@option" onchange="showAnswer(this)" />
+                    @option <span class="answer-indicator" style="display:none;">@(isCorrect ? "✅" : "❌")</span>
+                </label>
+                <br />
+            }
+        </div>
+    }
+</div>
+
+<a href="@Url.Action("Quiz3", "Quiz")" class="btn btn-primary">Next Page (Quiz 3)</a>
+
+
+<script>
+    function showAnswer(selectedOption) {
+        let options = selectedOption.closest('div').querySelectorAll('.quiz-option');
+        options.forEach(option => {
+            let input = option.querySelector('input');
+            let indicator = option.querySelector('.answer-indicator');
+            if (option.getAttribute('data-correct') === 'True') {
+                option.style.color = 'green';
+            } else if (input.checked) {
+                option.style.color = 'red';
+            } else {
+                option.style.color = '';
+            }
+            indicator.style.display = 'inline';
+        });
+    }
+
+    function shuffleQuestions(containerId) {
+        let container = document.getElementById(containerId);
+        let questions = Array.from(container.children);
+        questions.sort(() => Math.random() - 0.5);
+        container.innerHTML = "";
+        questions.forEach(q => container.appendChild(q));
+    }
+</script>

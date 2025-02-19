@@ -1,0 +1,15 @@
+﻿@model List<QuizQuestion>
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Results</h2>
+<p>Your Score: @ViewBag.Score / @ViewBag.Total</p>
+<h3>Correct Answers:</h3>
+<ul>
+    @foreach (var question in ViewBag.Questions)
+    {
+        <li>@question.QuestionText - <strong>@question.CorrectAnswer</strong></li>
+    }
+</ul>
